@@ -1,6 +1,7 @@
 import pygame
 import sys
 
+
 def check_win(mas, sign):
     zerous = 0
     for row in mas:
@@ -17,6 +18,8 @@ def check_win(mas, sign):
     if zerous == 0:
         return 'Draw'
     return False
+
+
 
 pygame.init()
 size_block = 100
@@ -52,10 +55,26 @@ while True:
                     else:
                         mas[row][col] = 'o'
                     query += 1
+            else:
+                if 30 <= x_mouse <= 330 and 400 <= y_mouse <= 500:
+                    game_over =False
+                    mas = [[0] * 3 for i in range(3)]
+                    query = 0
+                    screen.fill(black)
 
-
+        elif event.type == pygame.MOUSEBUTTONDOWN and game_over:
+            x_mouse, y_mouse = pygame.mouse.get_pos()
+            if 30 <= x_mouse <= 330 and 400 <= y_mouse <= 500:
+                game_over =False
+                mas = [[0] * 3 for i in range(3)]
+                query = 0
+                screen.fill(black)
 
     if not game_over:
+        pygame.draw.rect(screen, yellow, (30, 400, size_block+200, size_block))
+        my_font = pygame.font.SysFont('Comic Sans MS', 30)
+        text_surface = my_font.render('RESTART', False, (0, 0, 0))
+        screen.blit(text_surface, (110,425))
         for row in range(3):
             for col in range(3):
                 if mas[row][col] == 'x':
@@ -73,6 +92,7 @@ while True:
                 else:
                     pygame.draw.circle(screen, white, (x + size_block // 2, y + size_block // 2), size_block // 2 - 3, 4)
 
+
         if (query - 1) % 2 == 0:
             game_over = check_win(mas, 'x')
         else:
@@ -86,7 +106,5 @@ while True:
             text_x = screen.get_width() / 2 - text_rect.width / 2
             text_y = screen.get_height() / 2 - text_rect.height / 2
             screen.blit(text1, [text_x, text_y])
-
-
 
     pygame.display.update()
